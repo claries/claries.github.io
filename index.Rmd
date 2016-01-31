@@ -1,0 +1,72 @@
+---
+title       : Automobile MPG Prediction
+subtitle    : Reproducible Pitch Presentation for Data Product course
+author      : Chen L.
+job         : Student
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Motivation
+
+This report was intend to exploring the relationship between a set of variables and miles per gallon (MPG) using the mtcars data.  The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles 
+
+The data includes 11 variables as follows:
+1) mpg: Miles/(US) gallon
+2) cyl: Number of cylinders
+3) disp: Displacement (cu.in.)
+4) hp: Gross horsepower
+5) drat: Rear axle ratio
+6) wt: Weight (1000 lbs)
+7) qsec: 1/4 mile time
+8) vs: V engine or a straight engine
+9) am: Transmission, automatic or manual
+10) gear: Number of forward gears
+11) carb: Number of carburetors
+
+--- .class #id 
+
+## Single variable regression
+We began with a simple regression model considering only transmission type as predictor. 
+```{r,results='hold',echo=FALSE}
+data(mtcars)
+mtcars$cyl  <- factor(mtcars$cyl)
+mtcars$vs   <- factor(mtcars$vs)
+mtcars$gear <- factor(mtcars$gear)
+mtcars$carb <- factor(mtcars$carb)
+mtcars$am   <- factor(mtcars$am,labels=c("Automatic","Manual"))
+fit<-lm(mpg ~am, mtcars)
+ttest<-t.test(mpg ~ am, data = mtcars)
+```
+From the coefficients of the model, we could know that automatic cars are `r round(fit$coefficients[1],2)` MPG, while manual cars are `r round(fit$coefficients[2],2)` MPG more. This difference is significant (t(`r round(ttest$parameter,2)`)=`r round(ttest$statistic,2)`, p=`r round(ttest$p.value,3)`). However, the r-square indicated that our model only explained `r round(summary(fit)$r.squared,4)*100`% of the variance in MPG, suggested that there could be some other variables affect the MPG values.
+```{r,echo=FALSE}
+summary(fit)$coefficient
+```
+
+--- .class #id
+
+## Multivariable regression
+Then we choose the multiple regression model using AIC in a stepwise algorithm. 
+```{r,results='hide',echo=FALSE}
+fitAll <-lm(mpg ~., mtcars)
+fitBest <-step(fitAll)
+```
+
+The best model consider cyl,hp, wt as cofunders with am, and it explained `r round(summary(fitBest)$r.squared,4) * 100`% of the variance in MPG. This model is better than the simple regression model (p<0.0001). And in this model, manual cars also get better MPG, about `r round(fitBest$coefficients[6],2)` higher than automatic ones.
+```{r,results='hold',echo=FALSE}
+anova(fit,fitBest)
+```
+
+--- .class #id 
+
+## Conclusion
+Using both simple linear regression model and multiple regression model, we found that an manual transmission is better for MPG than automatic type, the average difference is about 7.2MPG in simple model, and 1.8MPG when considering number of cylinders, weight and gross horsepower as cofounders.
+```{r,echo=FALSE}
+par(mar=c(10,5,4,5)+0.1,xpd=TRUE)
+boxplot(mpg ~ am, data = mtcars, ylab = "Miles Per Gallon", xlab = "Transmission Type")
+```
+---
