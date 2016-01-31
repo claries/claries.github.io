@@ -16,17 +16,17 @@ knit        : slidify::knit2slides
 This report was intend to exploring the relationship between a set of variables and miles per gallon (MPG) using the mtcars data.  The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles 
 
 The data includes 11 variables as follows:
-1) mpg: Miles/(US) gallon
-2) cyl: Number of cylinders
-3) disp: Displacement (cu.in.)
-4) hp: Gross horsepower
-5) drat: Rear axle ratio
-6) wt: Weight (1000 lbs)
-7) qsec: 1/4 mile time
-8) vs: V engine or a straight engine
-9) am: Transmission, automatic or manual
-10) gear: Number of forward gears
-11) carb: Number of carburetors
+1) mpg: Miles/(US) gallon;
+2) cyl: Number of cylinders;
+3) disp: Displacement (cu.in.);
+4) hp: Gross horsepower;
+5) drat: Rear axle ratio;
+6) wt: Weight (1000 lbs);
+7) qsec: 1/4 mile time;
+8) vs: V engine or a straight engine;
+9) am: Transmission, automatic or manual;
+10) gear: Number of forward gears;
+11) carb: Number of carburetors.
 
 --- .class #id 
 
@@ -47,7 +47,7 @@ From the coefficients of the model, we could know that automatic cars are 17.15 
 Then we choose the multiple regression model using AIC in a stepwise algorithm. 
 
 
-The best model consider cyl,hp, wt as cofunders with am, and it explained 84.97% of the variance in MPG. This model is better than the simple regression model (p<0.0001). And in this model, manual cars also get better MPG, about NA higher than automatic ones.
+The best model consider cyl,hp, wt as cofunders with am, and it explained 84.97% of the variance in MPG. This model is better than the simple regression model (p<0.0001). And in this model, manual cars also get better MPG, about 2.94 higher than automatic ones.
 
 ```
 ## Analysis of Variance Table
